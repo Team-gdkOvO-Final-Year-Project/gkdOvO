@@ -137,11 +137,17 @@
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800">Data Preview Tables</h1>
                     <form action="http://127.0.0.1:5000/uploader" method="POST" enctype = "multipart/form-data">
-                    <div><p class = "mb-4">Please upload your data  
+                    <div>
+                    <p class = "mb-4">Please upload your data  
                     <input type="file" id="csv" name="file"></div>
                     <input type="submit" value="Submit">
                     </p>
                     </form>
+                    <div>
+                    <a href="preview.html">
+                            <button>Preview</button>
+                    </a>
+                    </div>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
@@ -151,6 +157,12 @@
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
+                                        <tr>
+                                            <th>1</th>
+                                            <th>2</th>
+                                            <th>3</th>
+
+                                    <!--
                                         <tr>
                                             <th>Name</th>
                                             <th>Position</th>
@@ -626,7 +638,7 @@
                                             <td>27</td>
                                             <td>2011/01/25</td>
                                             <td>$112,000</td>
-                                        </tr>
+                                        </tr>-->
                                     </tbody>
                                 </table>
                             </div>
