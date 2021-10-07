@@ -2,6 +2,8 @@ from flask import Flask, request,make_response,render_template,redirect
 import csv
 import io
 import os
+from flask.helpers import flash
+from tkinter import messagebox
 import pandas as pd
  
 app = Flask(__name__,template_folder='UI_pages')
@@ -15,12 +17,13 @@ def transform(text_file_contents):
 @app.route('/uploader', methods=['GET','POST'])
 def upload():
     #remove old preview table if exits
-    if os.path.isfile('Application/UI_pages/preview.html'):
-        os.remove('Application/UI_pages/preview.html')
+    # if os.path.isfile('Application/UI_pages/preview.html'):
+    #     os.remove('Application/UI_pages/preview.html')
     
     #receive data from html, read csv file and convert to dataframe
     file = request.files['file']
     try:
+        
         csv_data = pd.read_csv(file)
         preview_table = csv_data[0:23]    
         
@@ -47,18 +50,16 @@ def upload():
 
         with open('Application/UI_pages/preview.txt', 'a') as f:
             f.writelines('\n'.join(content))
-            
+        if os.path.isfile('Application/UI_pages/preview.html'):
+            os.remove('Application/UI_pages/preview.html')
+
         os.rename('Application/UI_pages/preview.txt','Application/UI_pages/preview.html')
         # os.replace('preview_script.html','/Application/UI_pages/preview_script.html')
         return ('Please click Preview button')
-    except:
-        return('no data')
-    # else:
-    #     file = request.files['file']
-    #     csv_data = pd.read_csv(file)
         
-    # print(csv_data)
-    # return(csv_data)
+    except:
+        return ("no data")
+
 
 @app.route('/preview')
 def preview():    
@@ -67,3 +68,4 @@ def preview():
  
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
+    
