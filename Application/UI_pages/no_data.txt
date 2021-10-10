@@ -114,35 +114,23 @@
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
-                     <div class="container-fluid">
+                    <div class="container-fluid">
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800">Data Preview Tables</h1>
                     <form action="http://127.0.0.1:5000/uploader" method="POST" enctype = "multipart/form-data">
                     <div class="container-fluid" >
-                    <p class = "mb-4">Please upload your data  
-                    <input  type="file" id="csv" name="file" value = "upload"><input class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" type="submit" value="Submit">
-                    </p>
+                    <p class = "mb-4"><h2>No Data Uploaded </h2></p>
                     </div>
                     </form>
 
-                    <div class="container-fluid">
-                        <p class = "mb-4">Preview Your Data 
-                            <a href="preview.html" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"> Preview </a>
-                        </p>
-                    </div>
+                    
                    
                     <div class="card shadow mb-4">
                         
                     </div>
 
                 </div>
-                <!-- /.container-fluid -->
-                <form action = "http://127.0.0.1:5000/remover" method="POST">
-                    <div class="container-fluid">
-                    <p class = "mb-4">Clear your data  
-                            <input type="submit" value = "Remove File" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"></input></p>
-                    </div>
-                </form>
+                
             <!-- End of Main Content -->
 
             <!-- Footer -->

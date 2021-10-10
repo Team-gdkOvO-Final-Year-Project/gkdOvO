@@ -65,6 +65,18 @@ def upload():
 def preview():    
     return render_template('preview.html')
 
+@app.route('/remover',methods=['GET','POST'] )
+def remove():
+    content = []
+    with open("Application/UI_pages/no_data.txt") as f:
+        lines = f.readlines()
+        for l in lines: 
+            content.append(l)
+    with open("Application/UI_pages/preview.html",'a') as f:
+        f.truncate(0)
+        f.writelines('\n'.join(content))
+    return ('ok')
+    
  
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
