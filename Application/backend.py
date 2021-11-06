@@ -60,6 +60,15 @@ def upload():
     except:
         return ("no data")
 
+# Receive data for analysis page, call functions from other py file for machine learning models
+# @app.route('/analysis', methods=['GET','POST'])
+# def upload():
+#     #receive data from html, read csv file and convert to dataframe
+#     file = request.files['file']
+#     try:
+#         csv_data = pd.read_csv(file)
+#     except:
+#         return ("no data")
 
 @app.route('/preview')
 def preview():    
