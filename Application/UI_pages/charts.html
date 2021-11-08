@@ -132,11 +132,17 @@
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800">Analyse Shops To Be Selected For Next Campaign</h1>
                     <p class="mb-4">Please click Analysis Button to process the shops analysis</a>.</p>
+                    <form action="http://127.0.0.1:5000/analysis" method="POST" enctype = "multipart/form-data">
                     <!-- <div class="container-fluid"> -->
                         <p class = "mb-4">
-                            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"> &nbsp&nbsp Analysis&nbsp &nbsp </a>
-                            &nbsp&nbsp&nbsp&nbsp&nbsp
+                            <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" type="submit" value="Submit"> &nbsp&nbsp Analysis&nbsp &nbsp </a> -->
+                            <p class = "mb-4">
+                                Please upload your final dataset
+                                <input  type="file" id="csv" name="file2" value = "upload">
+                                <input class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" type="submit" value="Analyse">
+                             </p>
                             <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"> Export Result </a></p>
+                    </form>
                     </div>
                     <!-- Content Row -->
                     <!-- <div class="row"> -->

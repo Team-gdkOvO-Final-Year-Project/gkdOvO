@@ -13,12 +13,13 @@ from matplotlib import pyplot
 import missingno as msno
 from sklearn.impute import KNNImputer
 
-def pre_processing(data):
-
+def pre_processing(url_prefix,data):
+    
     # ======= visualize missing data of all ======
     missing_fig=msno.bar(data)
+    # breakpoint()
     missing_fig_copy = missing_fig.get_figure()
-    missing_fig_copy.savefig('missing_value_all.png', bbox_inches = 'tight') 
+    missing_fig_copy.savefig(url_prefix+'preprocessing_missing_value_all.png', bbox_inches = 'tight') 
 
     # ======= simple fill-null ======
     data["manage_shop_indicator"].fillna(0,inplace=True)
@@ -37,7 +38,7 @@ def pre_processing(data):
     corr = data.corr()
     matrix = np.triu(corr)
     corr_fig=sns.heatmap(corr, annot=True, cmap='coolwarm', mask=matrix).get_figure()
-    corr_fig.savefig('corr.png', bbox_inches = 'tight')
+    corr_fig.savefig(url_prefix+'preprocessing_corr.png', bbox_inches = 'tight')
 
     #drop columns with high correlation
     data = data.drop(columns=['shop_history_order', 'masked_product_page_view'])

@@ -1,3 +1,4 @@
+# utility
 from flask import Flask, request,make_response,render_template,redirect
 import csv
 import io
@@ -5,6 +6,9 @@ import os
 from flask.helpers import flash
 from tkinter import messagebox
 import pandas as pd
+
+#function
+from pre_processing import pre_processing
  
 app = Flask(__name__,template_folder='UI_pages')
 
@@ -61,14 +65,19 @@ def upload():
         return ("no data")
 
 # Receive data for analysis page, call functions from other py file for machine learning models
-# @app.route('/analysis', methods=['GET','POST'])
-# def upload():
-#     #receive data from html, read csv file and convert to dataframe
-#     file = request.files['file']
-#     try:
-#         csv_data = pd.read_csv(file)
-#     except:
-#         return ("no data")
+@app.route('/analysis', methods=['GET','POST'])
+def analyse():
+    #add path prefix for saving image
+    url_prefix='Application/image/'
+
+    #receive data from html, read csv file and convert to dataframe
+    file = request.files['file2']
+    try:
+        csv_data = pd.read_csv(file)
+        whitelist_filled, non_whitelist_filled=pre_processing(url_prefix,csv_data)
+        return ('Please click Preview button')
+    except:
+        return ("no data")
 
 @app.route('/preview')
 def preview():    
