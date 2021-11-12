@@ -36,8 +36,9 @@ def threshold(unmatch_data, whitelist_data):
 
     #get shreshold
     score = wf_process['Score']
-    threshold = np.percentile(score,0.4)
+    threshold = np.percentile(score,0.8)
     #calculate score for unmatched shops
+    unmatch_data.set_index(["shop_index"], inplace=True)
     un_data_process = unmatch_data[features]
     un_data_process = un_data_process.eval(equation)
     #match threshold on unmatch shops
