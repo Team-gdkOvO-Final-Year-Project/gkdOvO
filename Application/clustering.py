@@ -137,6 +137,7 @@ def process_clustering(data,image_path):
     print(X2['agglomerative.ward.labels'].value_counts())
     print(X2['agglomerative.average.labels'].value_counts())
 
+    return X2
     #Visualizations
 '''
     trace1 = go.Scatter3d(
@@ -167,4 +168,4 @@ def process_clustering(data,image_path):
     py.offline.iplot(fig)
 '''
 
-    return X2
+    

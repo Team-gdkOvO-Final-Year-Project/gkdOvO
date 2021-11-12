@@ -4,11 +4,7 @@ import pandas as pd
 import copy
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
-#evaluation
-from sklearn.metrics import accuracy_score, auc, confusion_matrix, f1_score, precision_score, recall_cscore, roc_curve
-import prettytable
 #dot
-import pydotplus
 import matplotlib.pyplot as plt
 import seaborn as sns
 %matplotlib inline
