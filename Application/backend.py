@@ -9,6 +9,7 @@ import pandas as pd
 
 #function
 from pre_processing import pre_processing
+from classification import classification
  
 app = Flask(__name__,template_folder='UI_pages')
 
@@ -75,9 +76,11 @@ def analyse():
     try:
         csv_data = pd.read_csv(file)
         whitelist_filled, non_whitelist_filled=pre_processing(url_prefix,csv_data)
+        matched_shops, unmatched_shops = classification(whitelist_filled,non_whitelist_filled)
         return ('Please click Preview button')
     except:
         return ("no data")
+        
 
 @app.route('/preview')
 def preview():    
