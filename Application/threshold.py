@@ -7,8 +7,10 @@ from sklearn.feature_selection import f_regression
 
 def threshold(unmatch_data, whitelist_data):
     unmatch_data = unmatch_data.drop(columns=['Unnamed: 0','decorated_indicator'])
+    unmatch_data = unmatch_data[unmatch_data['performance_date']]
     #select k best fetures
-    w_df = whitelist_data.drop(['Unnamed: 0','decorated_indicator'],1)
+    w_df = whitelist_data[whitelist_data['performance_date']==8]
+    w_df = w_df.drop(['Unnamed: 0','decorated_indicator'],1)
     w_df = w_df.drop(['masked_campaign_tab_click'],1)
     w_x = w_df.drop("masked_order",1)
     w_y = w_df["masked_order"]
@@ -36,14 +38,14 @@ def threshold(unmatch_data, whitelist_data):
 
     #get shreshold
     score = wf_process['Score']
-    threshold = np.percentile(score,0.8)
+    threshold = np.percentile(score,50)
     #calculate score for unmatched shops
     unmatch_data.set_index(["shop_index"], inplace=True)
     un_data_process = unmatch_data[features]
     un_data_process = un_data_process.eval(equation)
     #match threshold on unmatch shops
     select_shop = un_data_process[un_data_process['Score']>threshold]
-    select_shop = select_shop.groupby('shop_index').mean()
+    
 
     return select_shop
 
