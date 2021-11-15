@@ -141,7 +141,9 @@
                                 <input  type="file" id="csv" name="file2" value = "upload">
                                 <input class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" type="submit" value="Analyse">
                              </p>
-                            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"> Export Result </a></p>
+                    </form>
+                    <form action="http://127.0.0.1:5000/export" method="POST" enctype = "multipart/form-data">
+                            <a href="http://127.0.0.1:5000/export" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" type = "submit" valuue = "export"> Export Result </a></p>
                     </form>
                     </div>
                     <!-- Content Row -->

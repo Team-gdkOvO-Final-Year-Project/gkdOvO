@@ -1,7 +1,7 @@
 # utility
 from flask import Flask, request,make_response,render_template,redirect
 import csv
-import io
+from io import StringIO
 import os
 from flask.helpers import flash
 from tkinter import messagebox
@@ -97,6 +97,19 @@ def remove():
         f.truncate(0)
         f.writelines('\n'.join(content))
     return ('ok')
+
+
+@app.route('/export',methods=['GET','POST'])
+def export():
+    csvList = ['10','5']
+    si = StringIO()
+    cw = csv.writer(si)
+    cw.writerows(csvList)
+    output = make_response(si.getvalue())
+    output.headers["Content-Disposition"] = "attachment; filename=export.csv"
+    output.headers["Content-type"] = "text/csv"
+    return output
+
     
  
 if __name__ == '__main__':
