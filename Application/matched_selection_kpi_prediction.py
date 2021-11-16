@@ -72,10 +72,12 @@ def MatchedShopSelection_KPIPrediction(raw_matched_data,selected_unmatched,white
     matplotlib.rcParams['figure.figsize'] = (12.0, 6.0)
     shop_L180D_order = pd.DataFrame({"shop_L180D_order":X["shop_L180D_order"], "log(shop_L180D_order + 1)":np.log1p(X["shop_L180D_order"])})
     shop_L180D_order.hist()
+    plt.savefig('matched_selection_log_transformationX.png')
 
     matplotlib.rcParams['figure.figsize'] = (12.0, 6.0)
     masked_order = pd.DataFrame({"masked_order":y, "log(masked_order + 1)":np.log1p(y)})
     masked_order.hist()
+    plt.savefig('matched_selection_log_transformationY.png')
 
     #log transform the target:
     y = np.log1p(y)
