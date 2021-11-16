@@ -4,8 +4,11 @@ import seaborn as sns
 import matplotlib
 
 import matplotlib.pyplot as plt
+from pandas.plotting import table
 from scipy.stats import skew
 from scipy.stats.stats import pearsonr
+from pandas.plotting import table
+
 
 #feature selection
 from sklearn.feature_selection import SelectKBest
@@ -128,6 +131,20 @@ def MatchedShopSelection_KPIPrediction(raw_matched_data,selected_unmatched,white
     per_pd = pd.DataFrame({'top n numbers':topn_dist,'cluster numbers':raw_dist})
     per_pd.loc[:,'percentage'] = per_pd['top n numbers'].values/per_pd['cluster numbers'].values
     topn_result_df = per_pd.sort_values(by = 'percentage',ascending = False)
+
+    #visualization
+    topn_result_df.index.name = 'cluster label'
+    topn_result_df = topn_result_df.reset_index()
+    col_name = topn_result_df.index.name
+
+    fig = plt.figure(figsize=(3,4), dpi =1400)
+    ax = fig.add_subplot(111,frame_on=False)
+    ax.xaxis.set_visible(False)
+    ax.yaxis.set_visible(False)
+
+    table(ax, topn_result_df, loc = 'center')
+    plt.savefig('matched_cluster.png')
+
 
     #Output
     selected_clusters = [topn_result_df.index[0],topn_result_df.index[1]]
