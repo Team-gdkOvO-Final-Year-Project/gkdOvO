@@ -10,9 +10,6 @@ import seaborn as sns
 # %matplotlib inline
 
 def classification(clustered_data,non_whitelist_data):
-    #===========process nonwhitelist data ============
-    non_whitelist_data = non_whitelist_data.groupby("shop_index").mean()
-    non_whitelist_data = non_whitelist_data.drop(columns=['decorated_indicator','performance_date','masked_item_impression','masked_order','masked_shop_page_view','masked_shop_click_from_search','masked_campaign_tab_click','masked_other_tab_click'])
     #===========train random forest model=============
     x = clustered_data.iloc[:,:11]
     y = clustered_data.iloc[:,-1]
@@ -39,6 +36,8 @@ def classification(clustered_data,non_whitelist_data):
     #add in prediction results for non-whitelistdata
 
     X = copy.deepcopy(non_whitelist_data)
+    X = x.groupby("shop_index").mean()
+    X = X.drop(columns=['decorated_indicator','performance_date','masked_item_impression','masked_order','masked_shop_page_view','masked_shop_click_from_search','masked_campaign_tab_click','masked_other_tab_click'])
     rf_labels = rf_model.predict(X)
     rf_probs = rf_model.predict_proba(X)
     rf_prob = [np.max(i) for i in rf_probs]
@@ -49,6 +48,10 @@ def classification(clustered_data,non_whitelist_data):
     matched_shops = X[X['rf_probs']>0.7]
     unmatched_shops = X[X['rf_probs']<=0.7]
 
+    match_df = matched_shops[['shop_index','rf_label']]
+    match = non_whitelist_data[non_whitelist_data['shop_index'].isin(matched_shops['shop_index'])]
+    unmatch_result = non_whitelist_data[non_whitelist_data['shop_index'].isin(unmatched_shops['shop_index'])]
+    match_result = pd.merge(match,match_df,on=['shop_index'])
     #output matched dataset, unmatched dataset
-    return matched_shops, unmatched_shops
+    return match_result, unmatch_result
 
