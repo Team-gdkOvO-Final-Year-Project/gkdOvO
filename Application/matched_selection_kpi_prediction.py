@@ -28,7 +28,7 @@ from sklearn.ensemble import RandomForestRegressor
 
 
 
-def MatchedShopSelection_KPIPrediction(raw_matched_data,selected_unmatched,whitelist_filled_latest):
+def MatchedShopSelection_KPIPrediction(raw_matched_data,selected_unmatched,whitelist_filled_latest,image_path):
     #run after unmatched shops selection
 
     #Preprocessing
@@ -75,12 +75,12 @@ def MatchedShopSelection_KPIPrediction(raw_matched_data,selected_unmatched,white
     matplotlib.rcParams['figure.figsize'] = (12.0, 6.0)
     shop_L180D_order = pd.DataFrame({"shop_L180D_order":X["shop_L180D_order"], "log(shop_L180D_order + 1)":np.log1p(X["shop_L180D_order"])})
     shop_L180D_order.hist()
-    plt.savefig('matched_selection_log_transformationX.png')
+    plt.savefig(image_path + 'matched_selection_log_transformationX.png')
 
     matplotlib.rcParams['figure.figsize'] = (12.0, 6.0)
     masked_order = pd.DataFrame({"masked_order":y, "log(masked_order + 1)":np.log1p(y)})
     masked_order.hist()
-    plt.savefig('matched_selection_log_transformationY.png')
+    plt.savefig(image_path + 'matched_selection_log_transformationY.png')
 
     #log transform the target:
     y = np.log1p(y)
@@ -143,7 +143,7 @@ def MatchedShopSelection_KPIPrediction(raw_matched_data,selected_unmatched,white
     ax.yaxis.set_visible(False)
 
     table(ax, topn_result_df, loc = 'center')
-    plt.savefig('matched_cluster.png')
+    plt.savefig(image_path + 'matched_cluster.png')
 
 
     #Output
@@ -153,15 +153,24 @@ def MatchedShopSelection_KPIPrediction(raw_matched_data,selected_unmatched,white
     #selected_matched_data.to_csv('selected_matched_shops.csv', index = False)
 
     #KPI Prediction
-    KPI_matched = selected_matched_data['predicted_orders']
-
-    unmatched_data = pd.read_csv('selected_unmatch.csv')
+    KPI_matched = campaignday_prediction['predicted_orders']
+    
+    
+    #unmatched_data = pd.read_csv('selected_unmatch.csv')
     X_unmatched = unmatched_data[features]
-    KPI_unmatched = RFregressor_model.predict(X_unmatched)
+    unmatched_prediction = RFregressor_model.predict(X_unmatched)
+    unmatched_data.loc[:,'unmatched_prediction'] = unmatched_prediction
+    unmatched_campaignday_prediction = unmatched_data[unmatched_data['performance_date'] == 8]
+    KPI_unmatched = unmatched_campaignday_prediction['unmatched_prediction']
+    
 
     #whitelisted_shops = pd.read_csv('whitelist_filled_latest.csv')
     X_whitelist = whitelisted_shops[features]
-    KPI_whitelisted = RFregressor_model.predict(X_whitelist)
+    whitelisted_prediction = RFregressor_model.predict(X_whitelist)
+    whitelisted_shops.loc[:,'whitelisted_prediction'] = whitelisted_prediction
+    whitelisted_campaignday_prediction = whitelisted_shops[whitelisted_shops['performance_date'] == 8]
+    KPI_whitelisted = whitelisted_campaignday_prediction['whitelisted_prediction']
+
 
     overall_KPI = sum(KPI_unmatched)+sum(KPI_whitelisted)+sum(KPI_matched)
 
