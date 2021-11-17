@@ -7,35 +7,37 @@ from sklearn.ensemble import RandomForestClassifier
 #dot
 import matplotlib.pyplot as plt
 import seaborn as sns
-%matplotlib inline
+# %matplotlib inline
 
 def classification(clustered_data,non_whitelist_data):
     #===========process nonwhitelist data ============
     non_whitelist_data = non_whitelist_data.groupby("shop_index").mean()
-    non_whitelist_data = non_whitelist_data.drop(columns=['decorated_indicator','Unnamed: 0','performance_date','masked_item_impression','masked_order','masked_shop_page_view','masked_shop_click_from_search','masked_campaign_tab_click','masked_other_tab_click'])
+    non_whitelist_data = non_whitelist_data.drop(columns=['decorated_indicator','performance_date','masked_item_impression','masked_order','masked_shop_page_view','masked_shop_click_from_search','masked_campaign_tab_click','masked_other_tab_click'])
     #===========train random forest model=============
     x = clustered_data.iloc[:,:11]
-    y = clustered_data.iloc[:,-5]
+    y = clustered_data.iloc[:,-1]
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=2018)
 
     # Create the model with 100 trees
+
     rf_model = RandomForestClassifier(n_estimators=100, bootstrap = True, max_features = 'sqrt')
 
     # Fit on training data
     rf_model.fit(x_train, y_train)
 
     # Actual class predictions
-    rf_predictions = rf_model.predict(x_test)
+    # rf_predictions = rf_model.predict(x_test)
 
     # Probabilities for each class
-    rf_probs =rf_model.predict_proba(x_test)[:, 1]
+    # rf_probs =rf_model.predict_proba(x_test)[:, 1]
 
     #prediction on non_whitelist data
-    predictions = rf_model.predict(non_whitelist_data)
-    proba = rf_model.predict_proba(non_whitelist_data)
+    # predictions = rf_model.predict(non_whitelist_data[:,:11])
+    # proba = rf_model.predict_proba(non_whitelist_data)
 
     #add in some visualization if needed
     #add in prediction results for non-whitelistdata
+
     X = copy.deepcopy(non_whitelist_data)
     rf_labels = rf_model.predict(X)
     rf_probs = rf_model.predict_proba(X)

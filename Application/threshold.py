@@ -5,12 +5,13 @@ import pandas as pd
 from sklearn.feature_selection import SelectKBest
 from sklearn.feature_selection import f_regression
 
-def threshold(unmatch_data, whitelist_data):
-    unmatch_data = unmatch_data.drop(columns=['Unnamed: 0','decorated_indicator'])
-    unmatch_data = unmatch_data[unmatch_data['performance_date']]
+def get_threshold(unmatch_data, whitelist_data):
+    # breakpoint()
+    # unmatch_data = unmatch_data.drop(columns=['Unnamed: 0','decorated_indicator'])
+    unmatch_data = unmatch_data[unmatch_data['performance_date']==8]
     #select k best fetures
     w_df = whitelist_data[whitelist_data['performance_date']==8]
-    w_df = w_df.drop(['Unnamed: 0','decorated_indicator'],1)
+    # w_df = w_df.drop(['Unnamed: 0','decorated_indicator'],1)
     w_df = w_df.drop(['masked_campaign_tab_click'],1)
     w_x = w_df.drop("masked_order",1)
     w_y = w_df["masked_order"]
@@ -20,7 +21,7 @@ def threshold(unmatch_data, whitelist_data):
     dfcolumns = pd.DataFrame(w_x.columns)
     featureScores = pd.concat([dfcolumns,dfscores],axis=1)
     featureScores.columns = ['Specs','Score']
-
+    
     #calculate coefficient
     feature = featureScores.nlargest(5,'Score')
     feature['Score'] = feature['Score']/(feature['Score'].sum())

@@ -9,14 +9,16 @@ import pandas as pd
 
 #function
 from pre_processing import pre_processing
+from clustering import process_clustering
 from classification import classification
+from threshold import get_threshold
+from matched_selection_kpi_prediction import MatchedShopSelection_KPIPrediction
  
 app = Flask(__name__,template_folder='UI_pages')
 
 
 def transform(text_file_contents):
     return text_file_contents.replace("=", ",")
-
 
 
 @app.route('/uploader', methods=['GET','POST'])
@@ -75,9 +77,35 @@ def analyse():
     file = request.files['file2']
     try:
         csv_data = pd.read_csv(file)
-        whitelist_filled, non_whitelist_filled=pre_processing(url_prefix,csv_data)
-        matched_shops, unmatched_shops = classification(whitelist_filled,non_whitelist_filled)
-        return ('Please click Preview button')
+        ###### Pre-processing ######
+        #For normal case
+        # whitelist_filled, non_whitelist_filled=pre_processing(url_prefix,csv_data)
+
+        #For demo - import filled dataset
+        non_whitelist_filled=csv_data[csv_data['decorated_indicator']==0]
+        whitelist_filled=csv_data[csv_data['decorated_indicator']==1]
+        non_whitelist_filled = non_whitelist_filled.drop(columns=['Unnamed: 0'])
+        whitelist_filled = whitelist_filled.drop(columns=['Unnamed: 0'])
+
+        ###### Clustering ######
+        labelled_whitelist=process_clustering(whitelist_filled,url_prefix)
+
+        ###### Classification ######
+        matched_shops, unmatched_shops = classification(labelled_whitelist,non_whitelist_filled)
+        # breakpoint()
+        ###### Prediction ######
+        #unmatched cases
+        unmatched_shop_list=list(unmatched_shops.index)
+        unmatch_data=non_whitelist_filled[non_whitelist_filled['shop_index'].isin(unmatched_shop_list)]
+        unmatched_selected_shop=get_threshold(unmatch_data, whitelist_filled)
+
+        #matched cases
+        # matched_shop_list=list(matched_shops.index)
+        # match_data=whitelist_filled[whitelist_filled['shop_index'].isin(matched_shop_list)]
+        # selected_matched_data , overall_KPI=MatchedShopSelection_KPIPrediction(match_data,unmatch_data,whitelist_filled)
+        
+        print(unmatched_selected_shop.iloc[:10,:])
+        return ('----')
     except:
         return ("no data")
         
