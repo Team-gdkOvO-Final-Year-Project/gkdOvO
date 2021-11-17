@@ -92,20 +92,18 @@ def analyse():
 
         ###### Classification ######
         matched_shops, unmatched_shops = classification(labelled_whitelist,non_whitelist_filled)
-        # breakpoint()
+
         ###### Prediction ######
         #unmatched cases
-        unmatched_shop_list=list(unmatched_shops.index)
-        unmatch_data=non_whitelist_filled[non_whitelist_filled['shop_index'].isin(unmatched_shop_list['shop_index'])]
-        unmatched_selected_shop=get_threshold(unmatch_data, whitelist_filled)
+        unmatched_selected_shop=get_threshold(unmatched_shops, whitelist_filled)
 
         #matched cases
-        # matched_shop_list=list(matched_shops.index)
-        # match_data=whitelist_filled[whitelist_filled['shop_index'].isin(matched_shop_list)]
-        # selected_matched_data , overall_KPI=MatchedShopSelection_KPIPrediction(match_data,unmatch_data,whitelist_filled)
+        global overall_KPI
+        global selected_matched_data
+
+        selected_matched_data , overall_KPI=MatchedShopSelection_KPIPrediction(matched_shops,unmatched_selected_shop,whitelist_filled,url_prefix)
         
-        print(unmatched_selected_shop.iloc[:10,:])
-        return ('----')
+        return ('Analysis result is successfully generated, please go back to analysis page')#render_template("charts.html")
     except:
         return ("no data")
         

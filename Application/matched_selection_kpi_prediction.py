@@ -28,12 +28,13 @@ from sklearn.ensemble import RandomForestRegressor
 
 
 
-def MatchedShopSelection_KPIPrediction(raw_matched_data,selected_unmatched,whitelist_filled_latest,image_path):
+def MatchedShopSelection_KPIPrediction(raw_matched_data,unmatched_data,whitelisted_shops,image_path):
     #run after unmatched shops selection
 
     #Preprocessing
     #raw_matched_data <-- matched_with_label
     #raw_matched_data = raw_matched_data.drop(columns=['Unnamed: 0','decorated_indicator'])
+    
     matched_data = raw_matched_data.groupby('shop_index').sum()
 
     #feature selection
@@ -48,17 +49,18 @@ def MatchedShopSelection_KPIPrediction(raw_matched_data,selected_unmatched,white
     bestfeatures = SelectKBest(score_func=f_regression, k=5)
     fit = bestfeatures.fit(raw_data_X,raw_data_y)
     dfscores = pd.DataFrame(fit.scores_)
+    
     dfcolumns = pd.DataFrame(raw_data_X.columns)
 
+    
     #concat two dataframes for better visualization 
     featureScores = pd.concat([dfcolumns,dfscores],axis=1)
     featureScores.columns = ['Specs','Score']  #naming the dataframe columns
-    print(featureScores.nlargest(5,'Score'))  #print 5 best features
-
+    # print(featureScores.nlargest(5,'Score'))  #print 5 best features
 
     features = featureScores.nlargest(5,'Score')
     features = features['Specs'].tolist()  
-    print(features)
+    # print(features)
 
     #  Prediction
     #prediction on umatched data with features selected
@@ -70,7 +72,7 @@ def MatchedShopSelection_KPIPrediction(raw_matched_data,selected_unmatched,white
     X = matched_data[features]
     y = matched_data['masked_order']
     # print(X.shape,y.shape)
-
+    
     # /////// Log Transformation Visualizations ///////
     matplotlib.rcParams['figure.figsize'] = (12.0, 6.0)
     shop_L180D_order = pd.DataFrame({"shop_L180D_order":X["shop_L180D_order"], "log(shop_L180D_order + 1)":np.log1p(X["shop_L180D_order"])})
@@ -103,8 +105,8 @@ def MatchedShopSelection_KPIPrediction(raw_matched_data,selected_unmatched,white
     RFregressor_model.fit(X_train,y_train)
 
     test_predicted_orders = RFregressor_model.predict(X_test)
-    print(test_predicted_orders)
-    print("MSE for Random Forest Regressor:",metrics.mean_squared_log_error(test_predicted_orders, y_test))
+    # print(test_predicted_orders)
+    # print("MSE for Random Forest Regressor:",metrics.mean_squared_log_error(test_predicted_orders, y_test))
     # print(metrics.mean_squared_log_error(predicted_prices, y_test))
 
     #evaluation
@@ -119,7 +121,6 @@ def MatchedShopSelection_KPIPrediction(raw_matched_data,selected_unmatched,white
 
     sorted_campaignday_prediction = campaignday_prediction.sort_values(by = 'predicted_orders',ascending = False)
 
-  
     n_percentage = 20
     top_n_per_matched_shops = sorted_campaignday_prediction.head(int(len(sorted_campaignday_prediction)*(n_percentage/100)))
 
@@ -142,7 +143,8 @@ def MatchedShopSelection_KPIPrediction(raw_matched_data,selected_unmatched,white
     ax.xaxis.set_visible(False)
     ax.yaxis.set_visible(False)
 
-    table(ax, topn_result_df, loc = 'center')
+
+    table(ax, topn_result_df, loc = 'center').set_fontsize(30)
     plt.savefig(image_path + 'matched_cluster.png')
 
 

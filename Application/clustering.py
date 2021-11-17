@@ -45,37 +45,37 @@ def process_clustering(data,image_path):
     kmeans.fit(X)
 
     # - labels & matrics
-    kmeans_labels = kmeans.labels_
+    # kmeans_labels = kmeans.labels_
     # kmean_score = metrics.silhouette_score(X, kmeans_labels, metric='euclidean')
 
     # AgglomerativeClustering
     # - complete
-    # dist = distance_matrix(X, X)
-    # Z = hierarchy.linkage(dist, 'complete')
-    # plt.figure(figsize=(30, 10))
-    # dendro = hierarchy.dendrogram(Z, leaf_rotation=0, leaf_font_size=12)
-    # plt.axhline(y=0.2, color='r', linestyle='--')
-    # plt.savefig(image_path+'clustering_agglo_complete.png')
+    dist = distance_matrix(X, X)
+    Z = hierarchy.linkage(dist, 'complete')
+    plt.figure(figsize=(30, 10))
+    dendro = hierarchy.dendrogram(Z, leaf_rotation=0, leaf_font_size=12)
+    plt.axhline(y=0.2, color='r', linestyle='--')
+    plt.savefig(image_path+'clustering_agglo_complete.png')
 
-    # # - ward
-    # plt.figure(figsize=(30, 10))
-    # plt.axhline(y=0.2, color='r', linestyle='--')
-    # dendrogram = sch.dendrogram(sch.linkage(X, method = 'ward'))
-    # plt.title('Dendrogram')
-    # plt.xlabel('Shops')
-    # plt.ylabel('Euclidean distances')
-    # plt.savefig(image_path+'clustering_agglo_ward.png')
+    # - ward
+    plt.figure(figsize=(30, 10))
+    plt.axhline(y=0.2, color='r', linestyle='--')
+    dendrogram = sch.dendrogram(sch.linkage(X, method = 'ward'))
+    plt.title('Dendrogram')
+    plt.xlabel('Shops')
+    plt.ylabel('Euclidean distances')
+    plt.savefig(image_path+'clustering_agglo_ward.png')
 
-    # # Using the dendrogram to find the optimal number of clusters
-    # plt.figure(figsize=(30, 10))
-    # dendrogram = sch.dendrogram(sch.linkage(X, method = 'average'))
-    # plt.axhline(y=0.2, color='r', linestyle='--')
-    # plt.title('Dendrogram')
-    # plt.xlabel('Shops')
-    # plt.ylabel('Euclidean distances')
-    # plt.savefig(image_path+'clustering_agglo_average.png')
+    # Using the dendrogram to find the optimal number of clusters
+    plt.figure(figsize=(30, 10))
+    dendrogram = sch.dendrogram(sch.linkage(X, method = 'average'))
+    plt.axhline(y=0.2, color='r', linestyle='--')
+    plt.title('Dendrogram')
+    plt.xlabel('Shops')
+    plt.ylabel('Euclidean distances')
+    plt.savefig(image_path+'clustering_agglo_average.png')
 
-
+    # breakpoint()
     # # Using the dendrogram to find the optimal number of clusters
     # plt.figure(figsize=(30, 10))
     # dendrogram = sch.dendrogram(sch.linkage(X, method = 'single'))
