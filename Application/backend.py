@@ -96,7 +96,7 @@ def analyse():
         ###### Prediction ######
         #unmatched cases
         unmatched_shop_list=list(unmatched_shops.index)
-        unmatch_data=non_whitelist_filled[non_whitelist_filled['shop_index'].isin(unmatched_shop_list)]
+        unmatch_data=non_whitelist_filled[non_whitelist_filled['shop_index'].isin(unmatched_shop_list['shop_index'])]
         unmatched_selected_shop=get_threshold(unmatch_data, whitelist_filled)
 
         #matched cases

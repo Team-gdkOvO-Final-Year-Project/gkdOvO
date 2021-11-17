@@ -5,10 +5,10 @@ import pandas as pd
 from sklearn.feature_selection import SelectKBest
 from sklearn.feature_selection import f_regression
 
+
 def get_threshold(unmatch_data, whitelist_data):
-    # breakpoint()
     # unmatch_data = unmatch_data.drop(columns=['Unnamed: 0','decorated_indicator'])
-    unmatch_data = unmatch_data[unmatch_data['performance_date']==8]
+    unmatch = unmatch_data[unmatch_data['performance_date']==8]
     #select k best fetures
     w_df = whitelist_data[whitelist_data['performance_date']==8]
     # w_df = w_df.drop(['Unnamed: 0','decorated_indicator'],1)
@@ -41,12 +41,13 @@ def get_threshold(unmatch_data, whitelist_data):
     score = wf_process['Score']
     threshold = np.percentile(score,50)
     #calculate score for unmatched shops
-    unmatch_data.set_index(["shop_index"], inplace=True)
-    un_data_process = unmatch_data[features]
+    unmatch.set_index(["shop_index"], inplace=True)
+    un_data_process = unmatch[features]
     un_data_process = un_data_process.eval(equation)
     #match threshold on unmatch shops
     select_shop = un_data_process[un_data_process['Score']>threshold]
+    final = unmatch_data[unmatch_data['shop_index'].isin(select_shop.index)]
     
 
-    return select_shop
+    return final
 
