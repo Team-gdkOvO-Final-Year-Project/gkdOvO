@@ -1,7 +1,8 @@
 # utility
-from flask import Flask, request,make_response,render_template,redirect
+from flask import Flask, request,make_response,render_template,redirect,Response
 import csv
-from io import StringIO
+from typing import Any, Dict, Optional
+from datetime import datetime
 import os
 from flask.helpers import flash
 from tkinter import messagebox
@@ -19,6 +20,16 @@ app = Flask(__name__,template_folder='UI_pages')
 
 def transform(text_file_contents):
     return text_file_contents.replace("=", ",")
+
+def generate_download_headers(
+        extension: str, filename: Optional[str] = None
+) -> Dict[str, Any]:
+    filename = filename if filename else datetime.now().strftime("%Y%m%d_%H%M%S")
+    content_disp = f"attachment; filename={filename}.{extension}"
+    headers = {"Content-Disposition": content_disp}
+    return headers
+
+
 
 
 @app.route('/uploader', methods=['GET','POST'])
@@ -127,14 +138,17 @@ def remove():
 
 @app.route('/export',methods=['GET','POST'])
 def export():
-    csvList = ['10','5']
-    si = StringIO()
-    cw = csv.writer(si)
-    cw.writerows(csvList)
-    output = make_response(si.getvalue())
-    output.headers["Content-Disposition"] = "attachment; filename=export.csv"
-    output.headers["Content-type"] = "text/csv"
-    return output
+    kpi = overall_KPI
+    shops = selected_matched_data
+
+    csv_bin_data = shops.to_csv(index=True, encoding="utf-8")  # 生成csv二进制流
+
+    return Response(
+        csv_bin_data,
+        status=200,
+        headers=generate_download_headers("csv"),
+        mimetype="application/csv",
+    )
 
     
  
