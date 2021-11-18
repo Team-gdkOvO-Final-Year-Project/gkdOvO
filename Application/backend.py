@@ -141,7 +141,7 @@ def analyse():
         global selected_matched_data
 
         selected_matched_data , overall_KPI=MatchedShopSelection_KPIPrediction(matched_shops,unmatched_selected_shop,whitelist_filled,url_prefix)
-        KPI = {'KPI':overall_KPI}
+        KPI = {'KPI':round(overall_KPI,2)}
         KPI = pd.DataFrame(KPI,index = [0])
 
         kpi_png = render_mpl_table(KPI, header_columns=0, col_width=2.0)
@@ -175,7 +175,7 @@ def export():
     kpi = overall_KPI
     shops = selected_matched_data
 
-    csv_bin_data = shops.to_csv(index=True, encoding="utf-8")  # 生成csv二进制流
+    csv_bin_data = shops.to_csv(index=False, encoding="utf-8")  # 生成csv二进制流
 
     return Response(
         csv_bin_data,
