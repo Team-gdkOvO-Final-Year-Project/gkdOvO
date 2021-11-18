@@ -4,10 +4,7 @@
 
                 </div>
                 <!-- /.container-fluid -->
-            <div class="container-fluid">
-            <p class = "mb-4">Clear your data  
-                    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"> Remove File </a></p>
-            </div>
+            
             <!-- End of Main Content -->
 
             <!-- Footer -->
