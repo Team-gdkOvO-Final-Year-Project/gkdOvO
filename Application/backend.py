@@ -141,10 +141,10 @@ def analyse():
         global selected_matched_data
 
         selected_matched_data , overall_KPI=MatchedShopSelection_KPIPrediction(matched_shops,unmatched_selected_shop,whitelist_filled,url_prefix)
-        KPI = {'KPI':round(overall_KPI,2)}
+        KPI = {'Estimated Number of Orders':int(overall_KPI)}
         KPI = pd.DataFrame(KPI,index = [0])
 
-        kpi_png = render_mpl_table(KPI, header_columns=0, col_width=2.0)
+        kpi_png = render_mpl_table(KPI, header_columns=0, col_width=8.0)
         kpi_png.get_figure().savefig(url_prefix+'KPI.png')
 
 
@@ -167,7 +167,7 @@ def remove():
     with open("Application/UI_pages/preview.html",'a') as f:
         f.truncate(0)
         f.writelines('\n'.join(content))
-    return ('ok')
+    return ('File is removed, please go back to preview page.')
 
 
 @app.route('/export',methods=['GET','POST'])

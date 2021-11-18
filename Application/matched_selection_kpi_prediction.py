@@ -146,12 +146,13 @@ def MatchedShopSelection_KPIPrediction(raw_matched_data,unmatched_data,whitelist
 
     table(ax, topn_result_df, loc = 'center').set_fontsize(30)
     plt.savefig(image_path + 'matched_cluster.png')
+    
 
 
     #Output
     selected_clusters = [topn_result_df.index[0],topn_result_df.index[1]]
     selected_matched_data = pd.concat([raw_matched_data[raw_matched_data['rf_label'] == selected_clusters[0]],raw_matched_data[raw_matched_data['rf_label'] == selected_clusters[1]]])
-
+    selected_matched_data = selected_matched_data[selected_matched_data['performance_date']== 8].iloc[:,:-2]
     #selected_matched_data.to_csv('selected_matched_shops.csv', index = False)
 
     #KPI Prediction
